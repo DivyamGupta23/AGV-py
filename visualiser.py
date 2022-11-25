@@ -4,6 +4,7 @@ import random
 from bubbleSort import bubble_sort
 from quickSort import quick_sort
 from bsearch import binarySearch
+from mergeSort import merge_sort
 
 ui = '#60A3D9'
 button = '#003B73'
@@ -15,13 +16,15 @@ grad = [
 root = Tk()
 style = ttk.Style(root)
 root.tk.call("source", "Azure-ttk-theme-main/azure.tcl")
-root.tk.call("set_theme", "dark")
-root.title('Sorting Algorithm Visualisation')
-root.maxsize(900, 600)
+root.tk.call("set_theme", "light")
+root.title('Algorithm Visualisation')
+root.maxsize(900, 900)
 root.config()
-
+theme_var = StringVar(root)
 algo = StringVar
 data = []
+old_data = []
+
 defaultsize = StringVar(root)
 defaultsize.set("60")
 defaulmin = StringVar(root)
@@ -31,12 +34,12 @@ defaulmax.set("100")
 retain = IntVar(root)
 
 
-def draw(data, color):
+def draw(data, color, swaps=0):
     canvas.delete("all")
-    ch = 450
+    ch = 650
     cw = 810
     xwidth = cw / (len(data) + 1)
-    offset = 45
+    offset = 50
     spacing = 8
     normaldata = [i / max(data) for i in data]
 
@@ -47,10 +50,13 @@ def draw(data, color):
         y1 = ch
         canvas.create_rectangle(x0, y0, x1, y1, fill=color[i], width=0)
         canvas.create_text(x0, y1 + 8, text=data[i], fill=color[i], font=('MS Sans Serif', 8))
+
+        # canvas.create_text(100, 100, text=f'SWAPS: {swaps}', fill=grad[1], font=('MS Sans Serif', 12))
     root.update()
 
 
-old_data = []
+def set_theme():
+    root.tk.call("set_theme", theme_var.get())
 
 
 def generate():
@@ -77,10 +83,12 @@ def generate():
         size = 100
     if size < 3:
         size = 3
-
     for _ in range(size):
-        data.append(random.randint(min, max))
-    draw(data, [grad[i % 2] for i in range(len(data))])
+        element = random.randint(min, max)
+        data.append(element)
+        old_data.append(element)
+    draw(data, [grad[i % 2] for i in range(len(data))], 0)
+    set_theme()
 
 
 def startAlgo():
@@ -89,26 +97,35 @@ def startAlgo():
         return
     if algomenu.get() == 'Quick Sort':
         quick_sort(data, 0, len(data) - 1, draw, speedScale.get())
-        draw(data, [grad[x % 2] for x in range(len(data))])
+        # draw(data, [grad[x % 2] for x in range(len(data))],0)
 
     elif algomenu.get() == 'Bubble Sort':
         bubble_sort(data, draw, speedScale.get())
-        draw(data, [grad[x % 2] for x in range(len(data))])
+        # draw(data, [grad[x % 2] for x in range(len(data))], 0)
+    elif algomenu.get() == 'Merge Sort':
+        merge_sort(data, draw, speedScale.get())
+
     elif algomenu.get() == 'Binary Search':
-        binarySearch(data, 0, len(data) - 1, int(xEntry.get()), draw, speedScale.get())
+        binarySearch(data, 0, len(data)-1, int(xEntry.get()), draw, speedScale.get())
 
 
-UI_frame = ttk.Frame(root, width=1000, height=100)
-UI_frame.grid(row=0, column=0, padx=0, pady=0)
+UI_frame = ttk.Frame(root, width=900, height=50)
+UI_frame.pack(padx=0, pady=0, side=TOP)
 
-canvas = Canvas(root, width=1000, height=600)
-canvas.grid(row=1, column=0, padx=0, pady=0)
+canvas = Canvas(root, width=1100, height=800)
+canvas.pack(side=BOTTOM)
 
 Label(UI_frame, text="Algorithm: ").grid(row=0, column=0, padx=0, pady=5, sticky=W)
-algomenu = ttk.Combobox(UI_frame, textvariable=algo, values=['Bubble Sort', 'Quick Sort', 'Binary Search'], width=14)
+algomenu = ttk.Combobox(UI_frame, textvariable=algo,
+                        values=['Bubble Sort', 'Quick Sort', 'Binary Search', 'Merge Sort'], width=14)
 algomenu.grid(row=0, column=1, padx=13, pady=5)
 algomenu.current(0)
 
+Label(UI_frame, text="Light").grid(row=3, column=0, padx=0, pady=5, sticky=W)
+theme_button = ttk.Checkbutton(UI_frame, style="Switch.TCheckbutton", variable=theme_var, onvalue="dark",
+                               offvalue="light",
+                               command=set_theme()).grid(row=3, column=0, padx=30, sticky=EW)
+Label(UI_frame, text="Dark").grid(row=3, column=0, padx=6, pady=5, sticky=E)
 ttk.Button(
     UI_frame, text="Start Algo.", style="Accent.TButton", command=startAlgo
 ).grid(row=1, column=4, padx=13, pady=0)
