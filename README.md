@@ -11,3 +11,5 @@ The visualizer includes several popular algorithms such as binary search, linear
 ![image](https://user-images.githubusercontent.com/95400068/224226619-04a2b2a4-a507-460e-b6c7-598a0321033e.png)
 
 ![image](https://user-images.githubusercontent.com/95400068/224226626-3feac238-3c15-4f94-a01f-952d514e712e.png)
+
+USE BY DOWNLOADING THE FILES AND RUNNING THE "visualiser.py"
