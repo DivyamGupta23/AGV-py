@@ -1,8 +1,8 @@
 import time
 
 grad = [
-    '#60A3D9',
-    '#0074B7'
+  '#6b71f5',
+    '#b1c8ed'
 ]
 grad_green = [
     '#C21010',
@@ -10,6 +10,8 @@ grad_green = [
 ]
 
 swaps = 0
+
+
 def bubble_sort(data, draw, timeTick):
     global swaps
     for i in range(len(data) - 1):

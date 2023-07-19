@@ -1,10 +1,10 @@
 import time
 
 grad = [
-    '#60A3D9',
-    '#0074B7'
+'#6b71f5',
+    '#b1c8ed'
 ]
-grad_green = [
+grad_ = [
     '#5BB318',
     '#2B7A0B'
 ]
@@ -58,9 +58,9 @@ def getclr(datalen, head, tail, border, currindx, swaping=False):
             colors.append("#CCCCCC")
 
         if i == tail:
-            colors[i] = grad_green[0]
+            colors[i] = grad_[0]
         elif i == border:
-            colors[i] = grad_green[1]
+            colors[i] = grad_[1]
         elif i == currindx:
             colors[i] = '#FEC260'
 

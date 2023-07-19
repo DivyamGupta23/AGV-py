@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import ttk
+import ttkbootstrap as ttk
 import random
 from bubbleSort import bubble_sort
 from quickSort import quick_sort
@@ -10,13 +10,13 @@ ui = '#60A3D9'
 button = '#003B73'
 bg_light = '#737373'
 grad = [
-    '#60A3D9',
-    '#0074B7'
+    '#6b71f5',
+    '#b1c8ed'
 ]
-root = Tk()
-style = ttk.Style(root)
-root.tk.call("source", "Azure-ttk-theme-main/azure.tcl")
-root.tk.call("set_theme", "light")
+root = ttk.Window(themename="morphcustom")
+# style = ttk.Style(root)
+# root.tk.call("source", "Azure-ttk-theme-main/azure.tcl")
+# root.tk.call("set_theme", "light")
 root.title('Algorithm Visualisation')
 root.maxsize(900, 900)
 root.config()
@@ -52,12 +52,12 @@ def main():
             canvas.create_rectangle(x0, y0, x1, y1, fill=color[i], width=0)
             canvas.create_text(x0, y1 + 8, text=data[i], fill=color[i], font=('MS Sans Serif', 8))
 
-            # canvas.create_text(100, 100, text=f'SWAPS: {swaps}', fill=grad[1], font=('MS Sans Serif', 12))
         root.update()
 
     def set_theme():
-        root.tk.call("set_theme", theme_var.get())
-
+        startButton.configure(state="active")
+        # root.tk.call("set_theme", theme_var.get())
+        pass
     def generate():
         global data
         try:
@@ -86,8 +86,10 @@ def main():
             element = random.randint(min, max)
             data.append(element)
             old_data.append(element)
+        startButton.configure(state=ACTIVE)   
         draw(data, [grad[i % 2] for i in range(len(data))], 0)
-        set_theme()
+        # set_theme()
+        
 
     def startAlgo():
         global data
@@ -101,7 +103,7 @@ def main():
             bubble_sort(data, draw, speedScale.get())
             # draw(data, [grad[x % 2] for x in range(len(data))], 0)
         elif algomenu.get() == 'Merge Sort':
-            merge_sort(data, draw, speedScale.get())
+            merge_sort(data, draw, speedScale.get()+0.03)
 
         elif algomenu.get() == 'Binary Search':
             binarySearch(data, 0, len(data) - 1, int(xEntry.get()), draw, speedScale.get())
@@ -118,15 +120,17 @@ def main():
     algomenu.grid(row=0, column=1, padx=13, pady=5)
     algomenu.current(0)
 
-    Label(UI_frame, text="Light").grid(row=3, column=0, padx=0, pady=5, sticky=W)
-    theme_button = ttk.Checkbutton(UI_frame, style="Switch.TCheckbutton", variable=theme_var, onvalue="dark",
-                                   offvalue="light",
-                                   command=set_theme()).grid(row=3, column=0, padx=30, sticky=EW)
-    Label(UI_frame, text="Dark").grid(row=3, column=0, padx=6, pady=5, sticky=E)
-    ttk.Button(
-        UI_frame, text="Start Algo.", style="Accent.TButton", command=startAlgo
-    ).grid(row=1, column=4, padx=13, pady=0)
-
+    # Label(UI_frame, text="Light").grid(row=3, column=0, padx=0, pady=5, sticky=W)
+    # theme_button = ttk.Checkbutton(UI_frame, style="Switch.TCheckbutton", variable=theme_var, onvalue="dark",
+    #                                offvalue="light",
+    #                                command=set_theme()).grid(row=3, column=0, padx=30, sticky=EW)
+    # Label(UI_frame, text="Dark").grid(row=3, column=0, padx=6, pady=5, sticky=E)
+    startButton = ttk.Button(UI_frame,)
+    startButton.configure(
+     text="      Start     ", style="Accent.TButton", command=startAlgo, state= DISABLED
+    )
+    startButton.grid(row=1, column=4, padx=13, pady=0)
+    
     Label(UI_frame, text="Size of Data: ").grid(row=1, column=0, padx=0, pady=5, sticky=W)
     sizeEntry = ttk.Spinbox(UI_frame, from_=0, to=100, increment=1, textvariable=defaultsize, width=6)
     sizeEntry.grid(row=1, column=1, padx=13, pady=5, sticky=W)
@@ -143,6 +147,7 @@ def main():
     speedScale = ttk.Scale(UI_frame, from_=1, to_=0.000001, length=150)
     speedScale.set(0.25)
     speedScale.grid(row=2, column=3, padx=13)
+    Label(UI_frame, text="").grid(row=2, column=4, padx=0, pady=5, sticky=W)
 
     Label(UI_frame, text="Find Element: ").grid(row=2, column=0, padx=0, pady=5, sticky=W)
     xEntry = ttk.Spinbox(UI_frame, from_=0, to=100, increment=1, width=6)
